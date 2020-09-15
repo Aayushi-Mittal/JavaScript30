@@ -12,3 +12,4 @@ Grab the course at [https://JavaScript30.com](https://JavaScript30.com)
 - **Day -** :zero::four: : [Array Cardio :muscle:](https://aayushi-mittal.github.io/JavaScript30/Day-04-Array-Cardio/index.html)
 - **Day -** :zero::five: : [Flex Panel Gallery :framed_picture:](https://aayushi-mittal.github.io/JavaScript30/Day-05-Flex-Panel-Gallery/index.html)
 - **Day -** :zero::seven: : [Array Cardio-2 :muscle::muscle:](https://aayushi-mittal.github.io/JavaScript30/Day-07-Array-Cardio-2/index.html)
+- **Day -** :zero::eight: : 
