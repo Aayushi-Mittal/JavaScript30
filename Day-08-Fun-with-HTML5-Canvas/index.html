@@ -1,97 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>HTML5 Canvas</title>
-</head>
-<body>
-  <p align="center"><span>WHITE BOARD</span><br>
-    <input type="radio" id="radio-one" name="notaswitch-one" value="Normal" onclick='lines=false'/>
-    <label for="radio-one">Normal</label>
-    <input type="radio" id="radio-two" name="notaswitch-one" value="Fun With Lines" onclick='lines=true'  checked/>
-    <label for="radio-two">Fun With Lines</label><br>
-    <button onclick='auto=true'>Auto</button>
-    <label for="spacing">Line Width :</label>
-    <input id="spacing" type="range" min="1" max="100" value="10">
-    <button onclick='auto=false'>Fixed</button>
-  </p>
-  <hr>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-const canvas = document.querySelector('#draw');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-ctx.strokeStyle = '#BADA55';
-ctx.lineJoin = 'round';
-ctx.lineCap = 'round';
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+  </head>
+  <body>
+    <p align="center">
+      <span>WHITE BOARD</span><br />
+      <input
+        type="radio"
+        id="radio-one"
+        name="notaswitch-one"
+        value="Normal"
+        onclick="lines=false"
+      />
+      <label for="radio-one">Normal</label>
+      <input
+        type="radio"
+        id="radio-two"
+        name="notaswitch-one"
+        value="Fun With Lines"
+        onclick="lines=true"
+        checked
+      />
+      <label for="radio-two">Fun With Lines</label>
+      <input type="checkbox" id="rainbow" />
+      <label for="rainbow">rainbow</label>
+      <input type="color" id="myColor" value="#BADA55" />
+      <label for="spacing">Line Width :</label>
+      <input id="spacing" type="range" min="1" max="100" value="10" />
+      <button onclick="auto=false">Fixed</button>
+      <button onclick="auto=true">Auto</button>
+    </p>
 
-let isDrawing = false;	//flag
-let lastX = 0;
-let lastY = 0;
-let hue = 0;
-let direction = true;
-var lines;
+    <hr />
 
-function draw(e) {	//e for event
-  if (!isDrawing) return; // stop the fn from running when they are not moused down
-  console.log(e);
-  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-  ctx.beginPath();
-  // start from
-  ctx.moveTo(lastX, lastY);
-  // go to
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
-  hue++;
-  if (hue >= 360) {
-    hue = 0;
-  }
-  //fun with lines
-  if(lines==false)
-  {
-      [lastX, lastY] = [e.offsetX, e.offsetY];
-      //auto mode
-      if(auto==true)
-        {
-          if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
-            direction = !direction;
-          }
-    
-          if(direction) {
-            ctx.lineWidth++;
-          } else {
-            ctx.lineWidth--;
+    <canvas id="draw" width="800" height="800"></canvas>
+
+    <script>
+      const canvas = document.querySelector("#draw");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      let rainbow = true;
+      var customcolor;
+      mycolor = document.getElementById("myColor");
+      mycolor.addEventListener("change", updatecolor, false);
+      document
+        .getElementById("rainbow")
+        .addEventListener("change", rainbowcolor, false);
+
+      function updatecolor(event) {
+        rainbow = false;
+        ctx.strokeStyle = document.getElementById("myColor").value;
+        document.getElementById("rainbow").checked = false;
+      }
+      function rainbowcolor(event) {
+        ctx.strokeStyle = "#BADA55";
+        rainbow = true;
+      }
+      //ctx.strokeStyle = "#BADA55";
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+
+      let isDrawing = false; //flag
+      let lastX = 0;
+      let lastY = 0;
+      let hue = 0;
+      let direction = true;
+      var lines;
+
+      function draw(e) {
+        //e for event
+        if (!isDrawing) return; // stop the fn from running when they are not moused down
+        //console.log(e);
+        ctx.beginPath();
+        // start from
+        ctx.moveTo(lastX, lastY);
+        // go to
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        if (rainbow == true) {
+          ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+          hue++;
+          if (hue >= 360) {
+            hue = 0;
           }
         }
-  }
-}
+        //fun with lines
+        if (lines == false) {
+          [lastX, lastY] = [e.offsetX, e.offsetY];
+          //auto mode
+          if (auto == true) {
+            if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+              direction = !direction;
+            }
 
-  canvas.addEventListener('mousedown', (e) => {
-  isDrawing = true;
-  [lastX, lastY] = [e.offsetX, e.offsetY];
-});
+            if (direction) {
+              ctx.lineWidth++;
+            } else {
+              ctx.lineWidth--;
+            }
+          }
+        }
+      }
 
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouseup', () => isDrawing = false);
-canvas.addEventListener('mouseout', () => isDrawing = false);
+      canvas.addEventListener("mousedown", (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+      });
 
-//for varying line width
-  const inputs = document.querySelectorAll('input');
-    function handleUpdate() {
-      ctx.lineWidth=this.value;
-    }
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", () => (isDrawing = false));
+      canvas.addEventListener("mouseout", () => (isDrawing = false));
 
-    inputs.forEach(input => input.addEventListener('change', handleUpdate));
-    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
-</script>
+      //for varying line width
+      const inputs = document.querySelectorAll("input");
+      function handleUpdate() {
+        ctx.lineWidth = this.value;
+      }
 
-<style>
-  html, body {
-    margin: 0;
-    border:5px black solid;
-  }
-</style>
+      inputs.forEach((input) => input.addEventListener("change", handleUpdate));
+      inputs.forEach((input) =>
+        input.addEventListener("mousemove", handleUpdate)
+      );
+    </script>
 
-</body>
+    <style>
+      html,
+      body {
+        margin: 0;
+        border: 5px black solid;
+      }
+    </style>
+  </body>
 </html>
